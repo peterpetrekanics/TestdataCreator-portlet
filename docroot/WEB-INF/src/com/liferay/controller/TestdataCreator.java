@@ -1,5 +1,6 @@
-package com.test;
+package com.liferay.controller;
 
+import com.liferay.model.UserHandlerModel;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -12,13 +13,11 @@ import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
-import javax.portlet.ProcessAction;
-import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
@@ -61,16 +60,28 @@ public class TestdataCreator extends MVCPortlet {
 			e.printStackTrace();
 		}
 		// System.out.println(adminUser.getUserId());
+		
+		UserHandlerModel userHandler = new UserHandlerModel();
 
+		
 		String performAction = ParamUtil.get(resourceRequest, "portletAction", "");
 
 		switch (performAction) {
 		case "createUsers":
-			;
+			String newUserName = ParamUtil.getString(resourceRequest, "newUserName");
+			String newUserCount = ParamUtil.getString(resourceRequest, "newUserCount");
+			userHandler.createUser(companyId, newUserName, newUserCount);
+			resourceResponse.setContentType("text/html");
+	        PrintWriter writer = resourceResponse.getWriter();
+	        writer.println(newUserName);
 			break;
 			
 		case "deleteUsers":
 			deleteUsers();
+			break;
+			
+		case "createUsers2":
+
 			break;
 
 		default:
@@ -95,8 +106,19 @@ public class TestdataCreator extends MVCPortlet {
 		System.out.println("serveResource ends..");
 	}
 
+	
+
 	private void deleteUsers() {
-		
+		System.out.println("delusers");
 	}
+	
+	public void addEmployee(ActionRequest actionRequest,
+			ActionResponse actionResponse) throws IOException, PortletException {
+			 
+			       System.out.println("addEmpl");
+			 
+			       
+			}
+
 
 }

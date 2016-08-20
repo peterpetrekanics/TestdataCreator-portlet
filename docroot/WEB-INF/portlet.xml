@@ -5,7 +5,7 @@
 	<portlet>
 		<portlet-name>testdata-creator</portlet-name>
 		<display-name>Testdata Creator</display-name>
-		<portlet-class>com.test.TestdataCreator</portlet-class>
+		<portlet-class>com.liferay.controller.TestdataCreator</portlet-class>
 		<init-param>
 			<name>view-template</name>
 			<value>/html/testdatacreator/view.jsp</value>
