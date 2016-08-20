@@ -109,9 +109,6 @@ public class TestdataCreator extends MVCPortlet {
 
 	
 
-	private void deleteUsers() {
-		System.out.println("delusers");
-	}
 	
 	public void addEmployee(ActionRequest actionRequest,
 			ActionResponse actionResponse) throws IOException, PortletException {

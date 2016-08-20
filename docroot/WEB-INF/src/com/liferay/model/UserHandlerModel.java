@@ -3,7 +3,9 @@ package com.liferay.model;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.model.User;
+import com.liferay.portal.model.UserGroup;
 import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.service.UserGroupLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.util.PortalUtil;
 
@@ -105,6 +107,29 @@ public class UserHandlerModel {
 				}
 			}
 		}
-		
 	}
+	
+	public void createUserGroup(long companyId, long adminUserId) {
+		
+		ServiceContext serviceContext = null;
+		try {
+			UserGroup myUserGroup =
+			UserGroupLocalServiceUtil.addUserGroup(
+			adminUserId, companyId, "myUserGroup1",
+			"description", serviceContext);
+		} catch (PortalException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SystemException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("The userGroup: myUserGroup"
+		+ " has been created");
+//		UserGroupLocalServiceUtil.addUserUserGroup(myUser.getUserId(),
+//		myUserGroup);
+//		System.out.println("The user: " + myUser.getScreenName()
+//		+ " has been added to " + myUserGroup.getName());
+	}
+	
 }
