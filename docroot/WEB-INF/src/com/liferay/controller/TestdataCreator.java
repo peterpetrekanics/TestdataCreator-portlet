@@ -27,6 +27,7 @@ import javax.portlet.ResourceResponse;
 public class TestdataCreator extends MVCPortlet {
 	static long companyId;
 	static User adminUser;
+	long adminUserId;
 
 	public void processAction(ActionRequest actionRequest, ActionResponse actionResponse) throws IOException,
 			PortletException {
@@ -59,7 +60,7 @@ public class TestdataCreator extends MVCPortlet {
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
-		// System.out.println(adminUser.getUserId());
+		adminUserId = adminUser.getUserId();
 		
 		UserHandlerModel userHandler = new UserHandlerModel();
 
@@ -70,14 +71,14 @@ public class TestdataCreator extends MVCPortlet {
 		case "createUsers":
 			String newUserName = ParamUtil.getString(resourceRequest, "newUserName");
 			String newUserCount = ParamUtil.getString(resourceRequest, "newUserCount");
-			userHandler.createUser(companyId, newUserName, newUserCount);
+			userHandler.createUser(companyId, adminUserId, newUserName, newUserCount);
 			resourceResponse.setContentType("text/html");
 	        PrintWriter writer = resourceResponse.getWriter();
 	        writer.println(newUserName);
 			break;
 			
 		case "deleteUsers":
-			deleteUsers();
+			userHandler.deleteNonAdminUsers(companyId);
 			break;
 			
 		case "createUsers2":
