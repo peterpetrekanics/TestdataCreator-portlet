@@ -28,6 +28,7 @@ public class TestdataCreator extends MVCPortlet {
 	static long companyId;
 	static User adminUser;
 	long adminUserId;
+	PrintWriter writer;
 
 	public void processAction(ActionRequest actionRequest, ActionResponse actionResponse) throws IOException,
 			PortletException {
@@ -70,19 +71,33 @@ public class TestdataCreator extends MVCPortlet {
 		switch (performAction) {
 		case "createUsers":
 			String newUserName = ParamUtil.getString(resourceRequest, "newUserName");
-			String newUserCount = ParamUtil.getString(resourceRequest, "newUserCount");
+			int newUserCount = ParamUtil.getInteger(resourceRequest, "newUserCount");
 			userHandler.createUser(companyId, adminUserId, newUserName, newUserCount);
 			resourceResponse.setContentType("text/html");
-	        PrintWriter writer = resourceResponse.getWriter();
-	        writer.println(newUserName);
+	        writer = resourceResponse.getWriter();
+	        writer.println("User creation finished");
 			break;
 			
 		case "deleteUsers":
 			userHandler.deleteNonAdminUsers(companyId);
 			break;
 			
-		case "createUsers2":
+		case "createUserGroups":
+			String newUserGroupName = ParamUtil.getString(resourceRequest, "newUserGroupName");
+			int newUserGroupCount = ParamUtil.getInteger(resourceRequest, "newUserGroupCount");
+			userHandler.createUserGroup(companyId, adminUserId, newUserGroupName, newUserGroupCount);
+			resourceResponse.setContentType("text/html");
+	        writer = resourceResponse.getWriter();
+	        writer.println("Usergroup creation finished");
+			break;
 
+		case "assignUsersToUserGroups":
+			int assignedUserCount = ParamUtil.getInteger(resourceRequest, "assignedUserCount");
+			System.out.println("auc: " + assignedUserCount);
+			userHandler.assignUsersToUserGroups(companyId, assignedUserCount);
+			resourceResponse.setContentType("text/html");
+	        writer = resourceResponse.getWriter();
+	        writer.println("User assigning finished");
 			break;
 
 		default:

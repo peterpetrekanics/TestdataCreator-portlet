@@ -28,7 +28,7 @@ TODO: Display current user count
 Enter a name for the new user(s):
 <input type="text" name="newUserName"/> <br>
 Enter how many users should be created
-<input type="number" name="newUserCount" min="1" max="5">
+<input type="number" name="newUserCount" min="1" value="5">
 <br/>
 <input type="button" value="Submit" onclick="callServeResource1()">
 </form>
@@ -72,4 +72,65 @@ function callServeResource1(){
 	<br>-------------------------------<br>
 
 
+<portlet:resourceURL var="resourceUrl3">
+	<portlet:param name="portletAction" value="createUserGroups"/> 
+	</portlet:resourceURL>
+
+<form name="newUserGroupCreatorForm" id="newUserGroups">
+Enter a name for the new userGroup(s):
+<input type="text" name="newUserGroupName"/> <br>
+Enter how many userGroups should be created
+<input type="number" name="newUserGroupCount" min="1" value="5">
+<br/>
+<input type="button" value="Submit" onclick="callServeResource3()">
+</form>
+	
+<script type="text/javascript">
+function callServeResource3(){
+    AUI().use('aui-io-request', function(A){
+        A.io.request('<%=resourceUrl3.toString()%>', {
+               method: 'post',
+               form: {
+                   id: 'newUserGroups'
+               },
+               on: {
+                    success: function() {
+                     alert(this.get('responseData'));
+                    }
+               }
+            });
+    });
+}
+</script>
+	
+	<br>-------------------------------<br>
+
+<portlet:resourceURL var="resourceUrl4">
+	<portlet:param name="portletAction" value="assignUsersToUserGroups"/> 
+	</portlet:resourceURL>
+
+<form name="UserAssignerForm" id="userAssigner">
+Enter how many users should be assigned to each userGroup: <br>
+<input type="number" name="assignedUserCount" min="1" value="5">
+<br/>
+<input type="button" value="Submit" onclick="callServeResource4()">
+</form>
+	
+<script type="text/javascript">
+function callServeResource4(){
+    AUI().use('aui-io-request', function(A){
+        A.io.request('<%=resourceUrl4.toString()%>', {
+               method: 'post',
+               form: {
+                   id: 'userAssigner'
+               },
+               on: {
+                    success: function() {
+                     alert(this.get('responseData'));
+                    }
+               }
+            });
+    });
+}
+</script>
 
