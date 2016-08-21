@@ -1,3 +1,4 @@
+//Tested, works on Liferay 6.2 EE SP14
 package com.liferay.controller;
 
 import com.liferay.model.UserHandlerModel;
@@ -6,9 +7,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.model.Company;
 import com.liferay.portal.model.User;
-import com.liferay.portal.model.UserGroup;
 import com.liferay.portal.service.CompanyLocalServiceUtil;
-import com.liferay.portal.service.UserGroupLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
@@ -40,7 +39,6 @@ public class TestdataCreator extends MVCPortlet {
 	@Override
 	public void serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws IOException,
 			PortletException {
-		// TODO Auto-generated method stub
 		// super.serveResource(resourceRequest, resourceResponse);
 		System.out.println("serveResource starts..");
 
@@ -65,14 +63,15 @@ public class TestdataCreator extends MVCPortlet {
 		
 		UserHandlerModel userHandler = new UserHandlerModel();
 
-		
+		// Retrieving the action's name that was initiated by the user
 		String performAction = ParamUtil.get(resourceRequest, "portletAction", "");
 
+		// Performing the action based on user input
 		switch (performAction) {
 		case "createUsers":
 			String newUserName = ParamUtil.getString(resourceRequest, "newUserName");
 			int newUserCount = ParamUtil.getInteger(resourceRequest, "newUserCount");
-			userHandler.createUser(companyId, adminUserId, newUserName, newUserCount);
+			if(newUserCount>0) userHandler.createUser(companyId, adminUserId, newUserName, newUserCount);
 			resourceResponse.setContentType("text/html");
 	        writer = resourceResponse.getWriter();
 	        writer.println("User creation finished");
@@ -85,7 +84,7 @@ public class TestdataCreator extends MVCPortlet {
 		case "createUserGroups":
 			String newUserGroupName = ParamUtil.getString(resourceRequest, "newUserGroupName");
 			int newUserGroupCount = ParamUtil.getInteger(resourceRequest, "newUserGroupCount");
-			userHandler.createUserGroup(companyId, adminUserId, newUserGroupName, newUserGroupCount);
+			if(newUserGroupCount>0) userHandler.createUserGroup(companyId, adminUserId, newUserGroupName, newUserGroupCount);
 			resourceResponse.setContentType("text/html");
 	        writer = resourceResponse.getWriter();
 	        writer.println("Usergroup creation finished");
@@ -93,45 +92,22 @@ public class TestdataCreator extends MVCPortlet {
 
 		case "assignUsersToUserGroups":
 			int assignedUserCount = ParamUtil.getInteger(resourceRequest, "assignedUserCount");
-			System.out.println("auc: " + assignedUserCount);
-			userHandler.assignUsersToUserGroups(companyId, assignedUserCount);
+			if(assignedUserCount>0)	userHandler.assignUsersToUserGroups(companyId, assignedUserCount);
 			resourceResponse.setContentType("text/html");
 	        writer = resourceResponse.getWriter();
 	        writer.println("User assigning finished");
 			break;
-
+			
+		case "deleteUserGroups":
+			userHandler.deleteUserGroups(companyId);
+			break;
+			
 		default:
 			;
 			break;
 		}
 		System.out.println("The following button was pressed: " + performAction);
-
 		
-		
-		
-		String myUserGroupName = "testUserGroup";
-		long userGroupId = 0;
-		try {
-			UserGroup myUserGroup = UserGroupLocalServiceUtil.getUserGroup(companyId, myUserGroupName);
-			userGroupId = myUserGroup.getUserGroupId();
-		} catch (PortalException e) {
-		} catch (SystemException e) {
-		}
-		// System.out.println(userGroupId);
-
 		System.out.println("serveResource ends..");
 	}
-
-	
-
-	
-	public void addEmployee(ActionRequest actionRequest,
-			ActionResponse actionResponse) throws IOException, PortletException {
-			 
-			       System.out.println("addEmpl");
-			 
-			       
-			}
-
-
 }

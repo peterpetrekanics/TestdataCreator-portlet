@@ -13,15 +13,11 @@ import java.util.List;
 import java.util.Locale;
 
 public class UserHandlerModel {
+
 	public void createUser(long companyId, long adminUserId,
 			String newUserName, int userCount) {
-		// System.out.println("companyid: " + companyId);
-
-		// long userId;
-		// String name;
-		// String description;
-		ServiceContext serviceContext = null;
-
+			ServiceContext serviceContext = null;
+			
 		for (int currentUserNumber = 1; currentUserNumber <= userCount; currentUserNumber++) {
 			try {
 				UserLocalServiceUtil.addUser(adminUserId, // creatorUserId,
@@ -56,7 +52,6 @@ public class UserHandlerModel {
 
 			} catch (Exception e) {
 				System.out.println("exception" + e);
-
 				e.printStackTrace();
 
 			} finally {
@@ -77,13 +72,13 @@ public class UserHandlerModel {
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
+		
 		for (User user : myUsers) {
 			if (user.isDefaultUser()
 					|| PortalUtil.isOmniadmin(user.getUserId())) {
 				System.out.println("Skipping user " + user.getScreenName());
 			} else {
 				User userToDelete = user;
-
 				System.out.println("Deleting user "
 						+ userToDelete.getScreenName());
 				try {
@@ -101,10 +96,11 @@ public class UserHandlerModel {
 			String newUserGroupName, int userGroupCount) {
 
 		ServiceContext serviceContext = null;
+		
 		for (int currentUserGroupNumber = 1; currentUserGroupNumber <= userGroupCount; currentUserGroupNumber++) {
 			try {
 				UserGroupLocalServiceUtil.addUserGroup(adminUserId, companyId,
-						newUserGroupName + currentUserGroupNumber,
+						newUserGroupName + String.format("%06d", currentUserGroupNumber),
 						"description", serviceContext);
 			} catch (PortalException e) {
 				e.printStackTrace();
@@ -120,14 +116,13 @@ public class UserHandlerModel {
 				}
 			}
 		}
-
 	}
 
-	public int getUserCount() throws SystemException {
+	public static int getUserCount() throws SystemException {
 		return UserLocalServiceUtil.getUsersCount();
 	}
 
-	private int getUserGroupCount() throws SystemException {
+	public static int getUserGroupCount() throws SystemException {
 		return UserGroupLocalServiceUtil.getUserGroupsCount();
 	}
 
@@ -137,6 +132,7 @@ public class UserHandlerModel {
 			int currentUserGroupNumber = 0;
 			int currentUserNumber = 1;
 			myUsers = UserLocalServiceUtil.getUsers(0, getUserCount());
+			
 			for (User user : myUsers) {
 				if (user.isDefaultUser()
 						|| PortalUtil.isOmniadmin(user.getUserId())) {
@@ -146,9 +142,8 @@ public class UserHandlerModel {
 					List<UserGroup> userGroupList = UserGroupLocalServiceUtil
 							.getUserGroups(0, getUserGroupCount());
 					try {
-						System.out.println("curr usr nr: " + currentUserNumber);
-						System.out.println("curr usr grp nr: "
-								+ currentUserGroupNumber);
+//						System.out.println("curr usr nr: " + currentUserNumber);
+//						System.out.println("curr usr grp nr: "	+ currentUserGroupNumber);
 						if (currentUserNumber != 1) {
 							if ((currentUserNumber - 1) % assignedUserCount == 0) {
 								if (currentUserGroupNumber + 1 >= getUserGroupCount()) {
@@ -178,6 +173,26 @@ public class UserHandlerModel {
 
 		} catch (SystemException e) {
 			e.printStackTrace();
+		}
+	}
+
+	public void deleteUserGroups(long companyId) {
+		List<UserGroup> myUserGroups = null;
+		try {
+			myUserGroups = UserGroupLocalServiceUtil.getUserGroups(0, getUserGroupCount());
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		for (UserGroup myUserGroup : myUserGroups) {
+			System.out.println("Deleting userGroup: " + myUserGroup.getName());
+			try {
+				UserGroupLocalServiceUtil.deleteUserGroup(myUserGroup);
+			} catch (PortalException e) {
+				e.printStackTrace();
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 }

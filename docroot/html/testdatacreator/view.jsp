@@ -1,38 +1,48 @@
-<%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet"%>
-<%@ taglib uri="http://liferay.com/tld/aui" prefix="aui" %>
-<%@ taglib uri="http://liferay.com/tld/portlet" prefix="liferay-portlet" %>
-<%@ taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme" %>
-<%@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
-<%@ taglib uri="http://liferay.com/tld/util" prefix="liferay-util" %>
-<%@page import="com.liferay.portal.kernel.util.Constants" %>
-<%@page import="com.liferay.portal.kernel.util.GetterUtil" %>
-<%@page import="com.liferay.portal.kernel.util.StringPool" %>
+<%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet"%>
+<%@ taglib uri="http://liferay.com/tld/aui" prefix="aui"%>
+<%@ taglib uri="http://liferay.com/tld/portlet" prefix="liferay-portlet"%>
+<%@ taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme"%>
+<%@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui"%>
+<%@ taglib uri="http://liferay.com/tld/util" prefix="liferay-util"%>
+<%@page import="com.liferay.portal.kernel.util.Constants"%>
+<%@page import="com.liferay.portal.kernel.util.GetterUtil"%>
+<%@page import="com.liferay.portal.kernel.util.StringPool"%>
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@page import="com.liferay.portal.theme.ThemeDisplay"%>
 <%@page import="com.liferay.portal.theme.PortletDisplay"%>
 <%@page import="com.liferay.portal.util.PortalUtil"%>
+<%@page import="com.liferay.model.UserHandlerModel"%>
 <%@page import="javax.portlet.RenderRequest"%>
 <%@page import="javax.portlet.ActionRequest"%>
-<%@page import="javax.portlet.PortletURL" %>
-
-TODO: Display current user count
+<%@page import="javax.portlet.PortletURL"%>
 
 <portlet:defineObjects />
 
+Current non-admin user count:
+<%=UserHandlerModel.getUserCount()-2%>
+<br>
+Current userGroup count:
+<%=UserHandlerModel.getUserGroupCount()%>
+<br>
+<br>
+____________________________________________
+<br>
+<b>User related tasks:</b>
+<br>
+<br>
 <portlet:resourceURL var="resourceUrl1">
-	<portlet:param name="portletAction" value="createUsers"/> 
-	</portlet:resourceURL>
+	<portlet:param name="portletAction" value="createUsers" />
+</portlet:resourceURL>
 
 <form name="newUserCreatorForm" id="newusers">
-Enter a name for the new user(s):
-<input type="text" name="newUserName"/> <br>
-Enter how many users should be created
-<input type="number" name="newUserCount" min="1" value="5">
-<br/>
-<input type="button" value="Submit" onclick="callServeResource1()">
+	Enter a name for the new user(s): <input type="text" name="newUserName" />
+	<br> Enter how many users should be created <input type="number"
+		name="newUserCount" onkeypress='return validateQty(event);' min="1"
+		value="5"> <br /> <input type="button" value="Create Users"
+		onclick="callServeResource1()">
 </form>
-	
+
 <script type="text/javascript">
 function callServeResource1(){
     AUI().use('aui-io-request', function(A){
@@ -44,6 +54,7 @@ function callServeResource1(){
                on: {
                     success: function() {
                      alert(this.get('responseData'));
+                     location.reload();
                     }
                }
             });
@@ -51,40 +62,48 @@ function callServeResource1(){
 }
 </script>
 
+-------------------------------
+<br>
 
+<portlet:resourceURL var="resourceUrl2">
+	<portlet:param name="portletAction" value="deleteUsers" />
+</portlet:resourceURL>
 
-	
-	<br>-------------------------------<br>
-	
-	<portlet:resourceURL var="resourceUrl2">
-	<portlet:param name="portletAction" value="deleteUsers"/> 
-	</portlet:resourceURL>
-	
-	<a href="#" onclick="callServeResource2()">Delete all non-admin users</a>
-	<script type="text/javascript">
+<a href="#" onclick="callServeResource2()">Click here to delete all non-admin users</a>
+<script type="text/javascript">
 	function callServeResource2(){
 		AUI().use('aui-io-request', function(A){
-			A.io.request('${resourceUrl2}');	 
+			A.io.request('${resourceUrl2}', {
+				on: {
+	                success: function() {
+	                 location.reload();
+	                }
+	           }
+			}
+			);
 		});
 	}
 	</script>
-	
-	<br>-------------------------------<br>
 
-
+<br>
+<br>
+____________________________________________
+<br>
+<b> Usergroup related tasks:</b>
+<br>
+<br>
 <portlet:resourceURL var="resourceUrl3">
-	<portlet:param name="portletAction" value="createUserGroups"/> 
-	</portlet:resourceURL>
+	<portlet:param name="portletAction" value="createUserGroups" />
+</portlet:resourceURL>
 
 <form name="newUserGroupCreatorForm" id="newUserGroups">
-Enter a name for the new userGroup(s):
-<input type="text" name="newUserGroupName"/> <br>
-Enter how many userGroups should be created
-<input type="number" name="newUserGroupCount" min="1" value="5">
-<br/>
-<input type="button" value="Submit" onclick="callServeResource3()">
+	Enter a name for the new userGroup(s): <input type="text"
+		name="newUserGroupName" /> <br> Enter how many userGroups should
+	be created <input type="number" name="newUserGroupCount"
+		onkeypress='return validateQty(event);' min="1" value="5"> <br />
+	<input type="button" value="Create UserGroups" onclick="callServeResource3()">
 </form>
-	
+
 <script type="text/javascript">
 function callServeResource3(){
     AUI().use('aui-io-request', function(A){
@@ -96,41 +115,80 @@ function callServeResource3(){
                on: {
                     success: function() {
                      alert(this.get('responseData'));
+                     location.reload();
                     }
                }
             });
     });
 }
 </script>
-	
-	<br>-------------------------------<br>
+
+-------------------------------
+<br>
 
 <portlet:resourceURL var="resourceUrl4">
-	<portlet:param name="portletAction" value="assignUsersToUserGroups"/> 
-	</portlet:resourceURL>
+	<portlet:param name="portletAction" value="assignUsersToUserGroups" />
+</portlet:resourceURL>
 
 <form name="UserAssignerForm" id="userAssigner">
-Enter how many users should be assigned to each userGroup: <br>
-<input type="number" name="assignedUserCount" min="1" value="5">
-<br/>
-<input type="button" value="Submit" onclick="callServeResource4()">
+	Enter how many users should be assigned to each userGroup: <br> <input
+		type="number" onkeypress='return validateQty(event);'
+		name="assignedUserCount" min="1" min="1000000" value="5"> <br />
+	<input type="button" value="Submit" onclick="callServeResource4()">
 </form>
-	
+
 <script type="text/javascript">
+function validateQty(event) {
+    var key = window.event ? event.keyCode : event.which;
+
+if (event.keyCode == 8 || event.keyCode == 46
+ || event.keyCode == 37 || event.keyCode == 39) {
+    return true;
+} else if ( key < 48 ) {
+    return false;
+} else if ( key > 57) {
+	return false;
+}
+else return true;
+};
+
 function callServeResource4(){
     AUI().use('aui-io-request', function(A){
         A.io.request('<%=resourceUrl4.toString()%>', {
-               method: 'post',
-               form: {
-                   id: 'userAssigner'
-               },
-               on: {
-                    success: function() {
-                     alert(this.get('responseData'));
-                    }
-               }
-            });
-    });
-}
+				method : 'post',
+				form : {
+					id : 'userAssigner'
+				},
+				on : {
+					success : function() {
+						alert(this.get('responseData'));
+						location.reload();
+					}
+				}
+			});
+		});
+	}
 </script>
 
+<br>
+-------------------------------
+<br>
+
+<portlet:resourceURL var="resourceUrl5">
+	<portlet:param name="portletAction" value="deleteUserGroups" />
+</portlet:resourceURL>
+
+<a href="#" onclick="callServeResource5()">Click here to delete all userGroups</a>
+<script type="text/javascript">
+	function callServeResource5() {
+		AUI().use('aui-io-request', function(A) {
+			A.io.request('${resourceUrl5}', {
+				on : {
+					success : function() {
+						location.reload();
+					}
+				}
+			});
+		});
+	}
+</script>
