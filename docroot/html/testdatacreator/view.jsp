@@ -192,3 +192,41 @@ function callServeResource4(){
 		});
 	}
 </script>
+
+____________________________________________
+<br>
+<b>Site related tasks:</b>
+<br>
+<br>
+<portlet:resourceURL var="resourceUrl6">
+	<portlet:param name="portletAction" value="createSites" />
+</portlet:resourceURL>
+
+<form name="newUserCreatorFormxx" id="newusersxx">
+	Enter a name for the new site(s): <input type="text" name="newUserNamexx" />
+	<br> Enter how many sites should be created <input type="number"
+		name="newUserCount" onkeypress='return validateQty(event);' min="1"
+		value="5"> <br /> <input type="button" value="Create Usersxx"
+		onclick="callServeResource1()">
+</form>
+
+<script type="text/javascript">
+function callServeResource1(){
+    AUI().use('aui-io-request', function(A){
+        A.io.request('<%=resourceUrl1.toString()%>', {
+               method: 'post',
+               form: {
+                   id: 'newusers'
+               },
+               on: {
+                    success: function() {
+                     alert(this.get('responseData'));
+                     location.reload();
+                    }
+               }
+            });
+    });
+}
+</script>
+
+-------------------------------
