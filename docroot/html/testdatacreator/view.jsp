@@ -192,7 +192,8 @@ function callServeResource4(){
 		});
 	}
 </script>
-
+<br>
+<br>
 ____________________________________________
 <br>
 <b>Site related tasks:</b>
@@ -202,21 +203,21 @@ ____________________________________________
 	<portlet:param name="portletAction" value="createSites" />
 </portlet:resourceURL>
 
-<form name="newUserCreatorFormxx" id="newusersxx">
-	Enter a name for the new site(s): <input type="text" name="newUserNamexx" />
+<form name="newSiteCreatorForm" id="newsites">
+	Enter a name for the new site(s): <input type="text" name="newSiteName" />
 	<br> Enter how many sites should be created <input type="number"
-		name="newUserCount" onkeypress='return validateQty(event);' min="1"
-		value="5"> <br /> <input type="button" value="Create sites"
-		onclick="callServeResource1()">
+		name="newSiteCount" onkeypress='return validateQty(event);' min="1"
+		value="5"> <br /> <input type="button" value="Create Sites"
+		onclick="callServeResource6()">
 </form>
 
 <script type="text/javascript">
-function callServeResource1(){
+function callServeResource6(){
     AUI().use('aui-io-request', function(A){
-        A.io.request('<%=resourceUrl1.toString()%>', {
+        A.io.request('<%=resourceUrl6.toString()%>', {
                method: 'post',
                form: {
-                   id: 'newusers'
+                   id: 'newsites'
                },
                on: {
                     success: function() {

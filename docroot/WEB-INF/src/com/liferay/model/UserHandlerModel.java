@@ -4,6 +4,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserGroup;
+import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserGroupLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
@@ -195,4 +196,37 @@ public class UserHandlerModel {
 			}
 		}
 	}
+	
+	public static int getSiteCount() throws SystemException {
+		return GroupLocalServiceUtil.getGroupsCount();
+	}
+
+	
+	public void createSite(long companyId, long adminUserId,
+			String newSiteName, int newSiteCount) {
+
+		ServiceContext serviceContext = null;
+		
+		for (int currentSiteNumber = 1; currentSiteNumber <= newSiteCount; currentSiteNumber++) {
+			//try {
+			//	GroupLocalServiceUtil.addGroup(adminUserId, companyId,
+			//			newUserGroupName + String.format("%06d", currentUserGroupNumber),
+			//			"description", serviceContext);
+			} catch (PortalException e) {
+				e.printStackTrace();
+			} catch (SystemException e) {
+				e.printStackTrace();
+			} finally {
+				try {
+					System.out
+							.println("Site count after site creation: "
+									+ getSiteCount());
+				} catch (SystemException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+
 }

@@ -102,6 +102,15 @@ public class TestdataCreator extends MVCPortlet {
 			userHandler.deleteUserGroups(companyId);
 			break;
 			
+		case "createSites":
+			String newSiteName = ParamUtil.getString(resourceRequest, "newSiteName");
+			int newSiteCount = ParamUtil.getInteger(resourceRequest, "newSiteCount");
+			if(newSiteCount>0) userHandler.createSite(companyId, adminUserId, newSiteName, newSiteCount);
+			resourceResponse.setContentType("text/html");
+	        writer = resourceResponse.getWriter();
+	        writer.println("Site creation finished");
+			break;
+					
 		default:
 			;
 			break;
