@@ -206,7 +206,7 @@ ____________________________________________
 	Enter a name for the new site(s): <input type="text" name="newUserNamexx" />
 	<br> Enter how many sites should be created <input type="number"
 		name="newUserCount" onkeypress='return validateQty(event);' min="1"
-		value="5"> <br /> <input type="button" value="Create Usersxx"
+		value="5"> <br /> <input type="button" value="Create Sites"
 		onclick="callServeResource1()">
 </form>
 
