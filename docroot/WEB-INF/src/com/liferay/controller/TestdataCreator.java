@@ -1,6 +1,7 @@
 //Tested, works on Liferay 6.2 EE SP14
 package com.liferay.controller;
 
+import com.liferay.model.SiteHandlerModel;
 import com.liferay.model.UserHandlerModel;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -62,6 +63,7 @@ public class TestdataCreator extends MVCPortlet {
 		adminUserId = adminUser.getUserId();
 		
 		UserHandlerModel userHandler = new UserHandlerModel();
+		SiteHandlerModel siteHandler = new SiteHandlerModel();
 
 		// Retrieving the action's name that was initiated by the user
 		String performAction = ParamUtil.get(resourceRequest, "portletAction", "");
@@ -105,7 +107,7 @@ public class TestdataCreator extends MVCPortlet {
 		case "createSites":
 			String newSiteName = ParamUtil.getString(resourceRequest, "newSiteName");
 			int newSiteCount = ParamUtil.getInteger(resourceRequest, "newSiteCount");
-			if(newSiteCount>0) userHandler.createSite(companyId, adminUserId, newSiteName, newSiteCount);
+			if(newSiteCount>0) siteHandler.createSite(companyId, adminUserId, newSiteName, newSiteCount);
 			resourceResponse.setContentType("text/html");
 	        writer = resourceResponse.getWriter();
 	        writer.println("Site creation finished");
