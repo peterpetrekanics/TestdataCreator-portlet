@@ -1,15 +1,22 @@
 //Tested, works on Liferay 6.2 EE SP14
 package com.liferay.controller;
 
+import com.liferay.model.JournalArticleModel;
 import com.liferay.model.SiteHandlerModel;
 import com.liferay.model.UserHandlerModel;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Company;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.CompanyLocalServiceUtil;
+import com.liferay.portal.service.GroupLocalServiceUtil;
+import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.service.UserLocalServiceUtil;
+import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portlet.journal.model.JournalArticle;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
 import java.io.IOException;
@@ -62,8 +69,35 @@ public class TestdataCreator extends MVCPortlet {
 		}
 		adminUserId = adminUser.getUserId();
 		
+		// Getting the default site's group
+		long defGroupId = 0;
+		try {
+			defGroupId = GroupLocalServiceUtil.getGroup(companyId, "Guest").getGroupId();
+		} catch (PortalException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		// Getting ThemeDisplay and ServiceContext
+		ThemeDisplay themeDisplay = (ThemeDisplay) resourceRequest
+				.getAttribute(WebKeys.THEME_DISPLAY);
+		ServiceContext serviceContext = null;
+		try {
+			serviceContext = ServiceContextFactory.getInstance(
+					JournalArticle.class.getName(), resourceRequest);
+		} catch (PortalException e1) {
+			
+			e1.printStackTrace();
+		} catch (SystemException e1) {
+			
+			e1.printStackTrace();
+		}
+		
+		// Initializing the Handlers
 		UserHandlerModel userHandler = new UserHandlerModel();
 		SiteHandlerModel siteHandler = new SiteHandlerModel();
+		JournalArticleModel journalArticleHandler = new JournalArticleModel();
 
 		// Retrieving the action's name that was initiated by the user
 		String performAction = ParamUtil.get(resourceRequest, "portletAction", "");
@@ -73,7 +107,7 @@ public class TestdataCreator extends MVCPortlet {
 		case "createUsers":
 			String newUserName = ParamUtil.getString(resourceRequest, "newUserName");
 			int newUserCount = ParamUtil.getInteger(resourceRequest, "newUserCount");
-			if(newUserCount>0) userHandler.createUser(companyId, adminUserId, newUserName, newUserCount);
+			if(newUserCount>0) userHandler.createUser(companyId, adminUserId, newUserName, newUserCount, serviceContext);
 			resourceResponse.setContentType("text/html");
 	        writer = resourceResponse.getWriter();
 	        writer.println("User creation finished");
@@ -112,6 +146,16 @@ public class TestdataCreator extends MVCPortlet {
 	        writer = resourceResponse.getWriter();
 	        writer.println("Site creation finished");
 			break;
+			
+		case "createArticles":
+			String newArticleName = ParamUtil.getString(resourceRequest, "newArticleName");
+			int newArticleCount = ParamUtil.getInteger(resourceRequest, "newArticleCount");
+			for (int i = 1; i <= newArticleCount; i++) {
+				journalArticleHandler.createArticle(companyId, defGroupId, adminUserId, newArticleName+i, newArticleCount, themeDisplay, serviceContext);
+			}
+			writer = resourceResponse.getWriter();
+	        writer.println("Article creation finished");
+			break;						
 					
 		default:
 			;

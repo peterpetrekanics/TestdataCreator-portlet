@@ -21,8 +21,7 @@ import java.util.Locale;
 public class UserHandlerModel {
 
 	public void createUser(long companyId, long adminUserId,
-			String newUserName, int userCount) {
-			ServiceContext serviceContext = null;
+			String newUserName, int userCount, ServiceContext serviceContext) {
 			
 		for (int currentUserNumber = 1; currentUserNumber <= userCount; currentUserNumber++) {
 			try {

@@ -229,5 +229,43 @@ function callServeResource6(){
     });
 }
 </script>
+<br>
+-------------------------------
+<br>
+____________________________________________
+<br>
+<b>Article related tasks:</b>
+<br>
+<br>
+<portlet:resourceURL var="resourceUrl7">
+	<portlet:param name="portletAction" value="createArticles" />
+</portlet:resourceURL>
+
+<form name="newArticleCreatorForm" id="newarticles">
+	Enter a name for the new article(s): <input type="text" name="newArticleName" />
+	<br> Enter how many articles should be created <input type="number"
+		name="newArticleCount" onkeypress='return validateQty(event);' min="1"
+		value="5"> <br /> <input type="button" value="Create Articles"
+		onclick="callServeResource7()">
+</form>
+
+<script type="text/javascript">
+function callServeResource7(){
+    AUI().use('aui-io-request', function(A){
+        A.io.request('<%=resourceUrl7.toString()%>', {
+               method: 'post',
+               form: {
+                   id: 'newarticles'
+               },
+               on: {
+                    success: function() {
+                     alert(this.get('responseData'));
+                     location.reload();
+                    }
+               }
+            });
+    });
+}
+</script>
 
 -------------------------------
