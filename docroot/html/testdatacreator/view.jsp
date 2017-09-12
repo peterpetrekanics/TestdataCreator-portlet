@@ -199,6 +199,8 @@ ____________________________________________
 <b>Site related tasks:</b>
 <br>
 <br>
+Note: if you create a template and a structure as Test Test, it will be used for the article creation.
+<br>
 <portlet:resourceURL var="resourceUrl6">
 	<portlet:param name="portletAction" value="createSites" />
 </portlet:resourceURL>
